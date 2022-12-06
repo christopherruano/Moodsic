@@ -109,3 +109,5 @@ def calculate_average_valence(term_valence):
     # calculate final average valence and return
     average_valence = total_track_valence / counter
     return average_valence
+
+   

@@ -12,6 +12,7 @@ app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
  
  
 @app.route("/")
@@ -38,21 +39,26 @@ def redirected():
 
 @app.route("/history")
 def getHistory():
+    # access user's data
     token = get_token()
     spotify = spotipy.Spotify(auth=token['access_token'])
+    # long term calculation
     long_term_tracks = spotify.current_user_top_tracks(limit=50, time_range="long_term")['items']
-
     average_valence_long = calculate_average_valence(long_term_tracks)
-
-    medium_term_tracks = spotify.current_user_top_tracks(limit=50, time_range="short_term")
-
+    # medium term calculation
+    medium_term_tracks = spotify.current_user_top_tracks(limit=50, time_range="medium_term")['items']
     average_valence_medium = calculate_average_valence(medium_term_tracks)
-
-    short_term_tracks = spotify.current_user_top_tracks(limit=50, time_range="short_term")
-
+    # short term calculation
+    short_term_tracks = spotify.current_user_top_tracks(limit=50, time_range="short_term")['items']
     average_valence_short = calculate_average_valence(short_term_tracks)
+    # calculate happiness percentages
+    happiness_percentage_long = round(average_valence_long * 100)
+    happiness_percentage_medium = round(average_valence_medium * 100)
+    happiness_percentage_short = round(average_valence_short * 100)
 
-    return str(average_valence_long), str(average_valence_medium), str(average_valence_short)
+    print(f"{happiness_percentage_long}, {happiness_percentage_medium}, {happiness_percentage_short}")
+
+    return happiness_percentage_long, happiness_percentage_medium, happiness_percentage_short
 
 
 def get_token():
@@ -76,7 +82,7 @@ def configure_oauth():
    )
 
 
-#def calculate_average_valence(term_valence):
+def calculate_average_valence(term_valence):
     token = get_token()
     spotify = spotipy.Spotify(auth=token['access_token'])
     # initialize variables

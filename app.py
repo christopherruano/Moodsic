@@ -53,18 +53,17 @@ def getHistory():
     short_term_tracks = spotify.current_user_top_tracks(limit=50, time_range="short_term")['items']
     average_valence_short = calculate_average_valence(short_term_tracks)
     # calculate happiness percentages
-    happiness_percentage_long = round(average_valence_long * 100)
-    happiness_percentage_medium = round(average_valence_medium * 100)
-    happiness_percentage_short = round(average_valence_short * 100)
+    happiness_percentage_long = str(round(average_valence_long * 100))
+    happiness_percentage_medium = str(round(average_valence_medium * 100))
+    happiness_percentage_short = str(round(average_valence_short * 100))
 
-    print(f"{happiness_percentage_long}, {happiness_percentage_medium}, {happiness_percentage_short}")
-
-    return happiness_percentage_long, happiness_percentage_medium, happiness_percentage_short
+    return render_template("results.html", long=happiness_percentage_long, medium=happiness_percentage_medium, short=happiness_percentage_short)
 
 
 @app.route("/logout")
 def logout():
-    session.clear()
+    for key in list(session.keys()):
+        session.pop(key)
     return redirect(url_for('index', _external=True))
 
 

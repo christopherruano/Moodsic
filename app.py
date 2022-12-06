@@ -8,11 +8,10 @@ import time
 app = Flask(__name__)
  
  
-# Configure session to use filesystem (instead of signed cookies)
+# create more permanent cookies (not super sensitive information)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
-
  
  
 @app.route("/")
@@ -31,8 +30,10 @@ def login():
 def redirected():
     oauth = configure_oauth()
     session.clear()
+    # use access code to get access token
     code = request.args.get("code")
     token = oauth.get_access_token(code)
+    # set token in session
     session[0] = token
     return redirect(url_for('getHistory',  _external=True))
  
@@ -61,12 +62,20 @@ def getHistory():
     return happiness_percentage_long, happiness_percentage_medium, happiness_percentage_short
 
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for('index', _external=True))
+
+
 def get_token():
     token = session[0]
+    # make sure access token is active
     if not token:
         return redirect(url_for('login', _external=True))
     current_time = int(time.time())
     expiration = token['expires_at'] - current_time < 60
+    # get refresh token when expired
     if (expiration):
         oauth = configure_oauth()
         token = oauth.refresh_access_token(token['refresh_token'])
@@ -97,7 +106,6 @@ def calculate_average_valence(term_valence):
         valence = intermediary['valence']
         total_track_valence += valence
         counter += 1
-
+    # calculate final average valence and return
     average_valence = total_track_valence / counter
-
     return average_valence

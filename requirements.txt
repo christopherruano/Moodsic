@@ -1,1 +1,1 @@
-Flask
+Flask, spotipy, pandas, numpy, time, spotify API client keys and secret key, and flask_ession

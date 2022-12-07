@@ -3,6 +3,8 @@ from flask_session import Session
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import time
+import pandas as pd
+import numpy as np
  
  
 app = Flask(__name__)
@@ -56,8 +58,14 @@ def getHistory():
     happiness_percentage_long = str(round(average_valence_long * 100))
     happiness_percentage_medium = str(round(average_valence_medium * 100))
     happiness_percentage_short = str(round(average_valence_short * 100))
+    # calculate percent change in happiness index
+    series_long = pd.Series([int(happiness_percentage_long), int(happiness_percentage_short)])
+    pct_change_long = series_long.pct_change()
+    pct_change_rounded = round(pct_change_long[1], 2)
 
-    return render_template("results.html", long=happiness_percentage_long, medium=happiness_percentage_medium, short=happiness_percentage_short)
+    
+
+    return render_template("results.html", long=happiness_percentage_long, medium=happiness_percentage_medium, short=happiness_percentage_short, pct_change_rounded=pct_change_rounded)
 
 
 @app.route("/logout")
@@ -108,3 +116,45 @@ def calculate_average_valence(term_valence):
     # calculate final average valence and return
     average_valence = total_track_valence / counter
     return average_valence
+
+
+def top_five_generator(tracks):
+    token = get_token()
+    spotify = spotipy.Spotify(auth=token['access_token'])
+    valence = 0
+    rank1, rank2, rank3, rank4, rank5 = 0, 0, 0, 0, 0
+    rank1_id, rank2_id, rank3_id, rank4_id, rank5_id = 0, 0, 0, 0, 0
+    for item in tracks:
+        track = item['id']
+        track_features = spotify.audio_features(tracks=track)
+        intermediary = track_features[0]
+        valence = intermediary['valence']
+        if (valence > rank1):
+            rank1 = valence
+            rank1_id = track
+            continue
+        elif (valence > rank2):
+            rank2 = valence
+            rank2_id = track
+            continue
+        elif (valence > rank3):
+            rank3 = valence
+            rank3_id = track
+            continue
+        elif (valence > rank4)
+            rank4 = valence
+            rank4_id = track
+            continue
+        elif (valence > rank5)
+            rank5 = valence
+            rank5_id = track
+            continue
+    number1 = artist_song_puller(rank1_id)
+    number2 = artist_song_puller(rank2_id)
+    number3 = 
+    
+
+def artist_song_puller(id):
+    token = get_token()
+    spotify = spotipy.Spotify(auth=token['access_token'])
+        

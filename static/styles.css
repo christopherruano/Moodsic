@@ -16,16 +16,20 @@
 	text-align: center;
 	font-size: 100px;
 	color: white;
+	font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
+
 }
 .homepage_n {
 	text-align: center;
 	font-size: 120px;
 	color: white;
+	font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
 }
 .homepage_t {
 	text-align: center;
 	font-size: 20px;
 	color: white;
+	font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
 }
 .homepage_l {
 	text-align: center;
@@ -34,15 +38,18 @@
 	padding-top: 200px;
 	padding-right: 75px;
 	padding-left: 75px;
+	font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
 }
 .homepage_lt {
 	text-align: center;
 	font-size: 30px;
 	color: white;
+	font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
 }
 .nav_t {
 	text-align: center;
 	font-size: 40px;
 	color: white;
 	padding: 10px;
+	font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
 }
